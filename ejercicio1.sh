@@ -1,0 +1,36 @@
+#!/bin/bash
+#verificación parámetros para que no caiga
+if [ $# -ne 3], then
+	echo "Debe pasar 3 argumentos: usuario, grupo, y archivo"
+	exit 1
+fi
+
+USUARIO=$1
+GRUPO=$2
+ARCHIVO=$3
+
+#verificación de root
+if [ "$(whoami)" != "root" ]; then
+	echo "Debe ejecutar el script como root"
+	exit 1
+fi
+
+#verificación de archivo
+
+#verificación de grupo
+if cat /etc/group | grep -q "^$GRUPO:"; then
+	echo "El grupo ya existe"
+else 
+	groupadd "$GRUPO"
+	echo "Se creó el grupo: $GRUPO"
+fi
+
+#verificación de usuario
+if /etc/passwd | grep -q "^$USUARIO:"; then
+	echo "El usario ya existe, se agregará al grupo"
+	usermod -aG "$GRUPO" "$USUARIO"
+else
+	echo "Se creará el usuario y se agregará al grupo"
+	adduser "$USUARIO"
+	usermod -aG "$GRUPO" "$USUARIO"
+fi
