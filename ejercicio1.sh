@@ -16,6 +16,10 @@ if [ "$(whoami)" != "root" ]; then
 fi
 
 #verificación de archivo
+if [ ! -f "$ARCHIVO" ]; then
+	echo "EL archivo no existe"
+	exit 1
+fi
 
 #verificación de grupo
 if cat /etc/group | grep -q "^$GRUPO:"; then
@@ -34,3 +38,8 @@ else
 	adduser "$USUARIO"
 	usermod -aG "$GRUPO" "$USUARIO"
 fi
+
+#cambiar propietario y grupo
+chown "$USUARIO:$GRUPO" "$ARCHIVO"
+
+chmod 740 "$ARCHIVO"
