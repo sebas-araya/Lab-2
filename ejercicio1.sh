@@ -1,6 +1,6 @@
 #!/bin/bash
 #verificación parámetros para que no caiga
-if [ $# -ne 3], then
+if [ $# -ne 3]; then
 	echo "Debe pasar 3 argumentos: usuario, grupo, y archivo"
 	exit 1
 fi
@@ -23,18 +23,18 @@ fi
 
 #verificación de grupo
 if cat /etc/group | grep -q "^$GRUPO:"; then
-	echo "El grupo ya existe"
+	echo "El grupo $GRUPO ya existe"
 else 
 	groupadd "$GRUPO"
 	echo "Se creó el grupo: $GRUPO"
 fi
 
 #verificación de usuario
-if /etc/passwd | grep -q "^$USUARIO:"; then
-	echo "El usario ya existe, se agregará al grupo"
+if cat /etc/passwd | grep -q "^$USUARIO:"; then
+	echo "El usario $USUARIO ya existe, se agregará al grupo"
 	usermod -aG "$GRUPO" "$USUARIO"
 else
-	echo "Se creará el usuario y se agregará al grupo"
+	echo "Se creará el usuario $USUARIO y se agregará al grupo $GRUPO"
 	adduser "$USUARIO"
 	usermod -aG "$GRUPO" "$USUARIO"
 fi
@@ -42,4 +42,5 @@ fi
 #cambiar propietario y grupo
 chown "$USUARIO:$GRUPO" "$ARCHIVO"
 
-chmod 740 "$ARCHIVO"
+#cambiar permisos
+chmod u=rwx, g=r,o=  "$ARCHIVO"
