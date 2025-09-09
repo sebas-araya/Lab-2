@@ -3,22 +3,20 @@
 comando="$@"
 log="monitoreo.log"
 
-$comando &
+$comando & #manda comando a background
 
 PID=$(ps -C "$comando" -o pid= | head -n 1)
 
-if [ z "$PID" ]; then
+if [ -z "$PID" ]; then
 	echo "No se pudo encontrar el proceso"
 	exit 1
 fi
 
-echo "Se va a ejecutar el comando $comando con el PID: $PID. Los datos de CPU y memoria se guardan en $log"
+echo "Se ejecutará el comando: $comando con el PID: $PID. Los datos de CPU y memoria se guardan en $log"
 
-while ps -p $PID > /dev/null; do
-	TS=$(date +%s)
-	CPU=$(ps -p $PID -o %cpu=)
-	mem=$(ps -p $PID -o %mem=)
-	echo "$TS,$CPU,$MEM" >> "$log"
-	sleep 2
+for i in 1 2 3 4 5; do
+	fecha=$(date +%s)
+	info=$(ps -C "$comando" -o %cpu=,%mem= | head -n 1)
+	echo "$fecha,$info" >> "$log"
 done
 
