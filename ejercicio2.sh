@@ -20,3 +20,12 @@ for i in 1 2 3 4 5; do
 	echo "$fecha,$info" >> "$log"
 done
 
+gnuplot -persist <<-EOF
+	set title "Monitoreo de $comando"
+	set xlabel "Tiempo (s)"
+	set ylabel "Uso (%)"
+	set datafile separator ","
+	plot "$log" using 1:2 with lines title "CPU", \
+	     "$log" using 1:3 with lines title "MEM"
+EOF
+
