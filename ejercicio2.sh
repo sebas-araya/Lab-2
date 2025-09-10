@@ -14,11 +14,12 @@ fi
 
 echo "Se ejecutará el comando: $comando con el PID: $PID. Los datos de CPU y memoria se guardan en $log"
 
-for i in 1 2 3 4 5; do
+while ps -p $PID > /dev/null; do
 	fecha=$(date +%s)
 	CPU=$(ps -C "$comando" -o %cpu= | head -n 1)
 	mem=$(ps -C "$comando" -o %mem= | head -n 1)
 	echo "$fecha,$CPU,$mem" >> "$log"
+	sleep 1
 done
 
 gnuplot -persist <<-EOF
@@ -29,3 +30,4 @@ gnuplot -persist <<-EOF
 	plot "$log" using 1:2 with lines title "CPU", \
 	     "$log" using 1:3 with lines title "MEM"
 EOF
+
