@@ -25,7 +25,7 @@ gnuplot -persist <<-EOF
 	set title "Monitoreo de $comando"
 	set xlabel "Tiempo (s)"
 	set ylabel "Uso (%)"
-	set datafile separator ","
+	set datafile separator " "
 	plot "$log" using 1:2 with lines title "CPU", \
 	     "$log" using 1:3 with lines title "MEM"
 	set term x11
