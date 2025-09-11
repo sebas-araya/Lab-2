@@ -1,5 +1,5 @@
-directorio="/home/sebasaraya/"
-logfile="/home/sebasaraya/monitoreo2.log"
+directorio="/home/sebasaraya"
+logfile="/home/sebasaraya/logs/monitoreo2.log"
 
 echo "Se va a monitorear el direcotorio $directorio, los cambios se guardan en $logfile"
 
